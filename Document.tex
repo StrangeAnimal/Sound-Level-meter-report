@@ -12,7 +12,7 @@
 \graphicspath{ {Images/} }
 \usepackage{listings}
 \usepackage{float}
-
+\addbibresource{bibliography.bib}
 \usepackage{color}
 
 \author{James Walker-Wilson}
@@ -392,7 +392,7 @@ The Low Pass Filter was constructed on the circuit board according to the circui
 \end{figure}
 
 \subsubsection{PIC Microcontroller}
-The Microcontroller circuit was constructed according to the circuit diagram shown in figure \ref{PIC}. The PIC was then programmed with the code shown in the design phase shown in figure \ref{code}
+The Microcontroller circuit was constructed according to the circuit diagram shown in figure \ref{PIC}. The PIC was then programmed with the code shown in the design phase shown in figure \ref{code}.
 
 \begin{figure}
 \includegraphics[width = \textwidth]{PIC}
@@ -400,11 +400,44 @@ The Microcontroller circuit was constructed according to the circuit diagram sho
 \label{PIC}
 \end{figure} 
 
+\subsubsection{Final Test}
+Once all parts of the circuit were connected together the meter was tested by playing a $1.5kHz$ tone through a speaker from a signal generator near the meter and observing the LED's.
 
 
-\subsection{Analysis}
+
+
+
+
 
 \section{Analysis}
+\subsection{Common Emitter Amplifier}
+The Common Emitter Amplifier is used to amplify the low level signals coming from the microphone. This amplifier is used due to multiple attributes of the amplifier, namely, high input impedance, class A operation to prevent distortion and high single stage gain.
+
+\subsubsection{Input Impedance}
+The high input impedance is needed as the microphone is a high impedance device and to allow maximum power transfer between the microphone and the amplifier $Z_{mic} \approx Z_{amp}$. If this were not the case the already small signal from the microphone would be reduced even more due to internal losses in the internal series impedance of the microphone. The input impedance of the amplifier can be calculated by looking at what impedance the input sees looking in to the input, this is ,$R1$,$R2$ and the impedance lookin in to the base all in paralell \cite{ArtElectronics}. $R1 = 270k\Omega$,$R2 = 40k\Omega$ and the impedance looking in to the base is $h_{fe} \times R_E$ as $h_{fe}$ is equal to $\beta$ \cite{ArtElectronics} $265k\Omega= 787(R_4)\Omega \times 337(\beta)$.
+this works out to be  
+
+\begin{center}
+\Huge
+
+$Z_{in}= (\frac{1}{270\times 10^{3}} +\frac{1}{40\times 10^{3}} + \frac{1}{265 \times 10^{3}} )^{-1} \approx 31k\Omega$
+
+
+
+\end{center}
+The input capacitor $C_1 = 10\mu F$ is in series with the input impedance of $31k\Omega$, the capacitor also forms a high pass filter with the input impedance 
+\begin{center}
+\Huge
+
+$F_c = \frac{1}{2\pi RC} = 0.5Hz$
+
+
+
+\end{center}
+\cite{ArtElectronics}
+As the $3dB$ cut-off point is $0.5Hz$ almost all signal energy will be well above this point so the attenuation of this high pass filter can be ignored as it is negligible at frequencies of interest.
+\subsubsection{Output Impedance}
+The output impedance of the amplifier is calculated as the collector resistor in parallel with the resistance looking in to the collector. The resistance of the collector resistor is know as $3.9k\Omega$ and the resistance looking in to the collector is te resistance of the transistor and the emitter resistor in series. As the transistor can be modelled as a current source there is a current source in series with $R_E$. A current source has impedance $\approx \infty$. The output impedance is therefore the $3.9k\Omega$ resistor in parallel with a near infinite resistance so $Z_{out} \approx 3.9K\Omega$  
 
 \section{Conclusion}
 
