@@ -194,7 +194,7 @@ The code was made to light all the LED's when maximum sound level was achieved. 
 \end{tabu}
 \newline
 These values were then used to create the code 
-\begin{lstlisting}[language= C]
+\begin{lstlisting}[caption={PIC Code},label={lst:code},language= C]
 //Newcastle University - EEE - Stage 1 - Sound Level Meter
 //16F819 PIC software to drive a 10-LED bargraph display from a dc level on ADC input 0 (AN0).
 //Port A and B used to drive LEDs.
@@ -390,6 +390,17 @@ The Low Pass Filter was constructed on the circuit board according to the circui
 \caption{Low Pass Filter Characterisation}
 \label{LPFchar}
 \end{figure}
+
+\subsubsection{PIC Microcontroller}
+The Microcontroller circuit was constructed according to the circuit diagram shown in figure \ref{PIC}. The PIC was then programmed with the code shown in the design phase shown in figure \ref{code}
+
+\begin{figure}
+\includegraphics[width = \textwidth]{PIC}
+\caption{PIC Microcontroller circuit diagram}
+\label{PIC}
+\end{figure} 
+
+
 
 \subsection{Analysis}
 
