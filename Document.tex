@@ -458,7 +458,48 @@ $F=\frac{1}{2\pi\sqrt{LC}} = 1.5kHz$
 
 
 \end{center}
-The circuit also has a property called $Q$. The $Q$ factor is a representation of how damped the circuit is. Damping is a measure of the loss of energy from the circuit. A parallel LC circuit with ideal inductors and capacitors would have a $Q = \infty$ as no energy is lost from the circuit and the resonant oscilations would continue forever. The higher the Q of the circuit the sharper the peak of resonance is meaning that a high Q circuit would transition form low impedance at frequencies not equal to the resonant to high impedance at the resonant frequency very quickly and then transition back to low impedance.       
+The circuit also has a property called $Q$. The $Q$ factor is a representation of how damped the circuit is. Damping is a measure of the loss of energy from the circuit. A parallel LC circuit with ideal inductors and capacitors would have a $Q = \infty$ as no energy is lost from the circuit and the resonant oscillations would continue forever. The higher the Q of the circuit the sharper the peak of resonance is meaning that a high Q circuit would transition form low impedance at frequencies not equal to the resonant to high impedance at the resonant frequency very quickly and then transition back to low impedance very quickly. The $Q$ factor for this circuit is given by. 
+
+
+
+
+\begin{center}
+\Huge
+
+$Q= \omega_0RC = 2.07$
+
+
+
+\end{center}
+
+
+\begin{figure}[!h]
+\includegraphics[width=\textwidth]{BPFgraph}
+\caption{Voltage against frequency for band pass filter}
+\label{BPFgraph}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+   
+This means that the bandwidth of the filter is $723Hz$ as bandwidth is equal to the resonant frequency divided by the $Q$ factor. The $3dB$ pass band for this filter is $1140Hz$ to $1860Hz$. This however is not precise as the resonant circuit is also damped by the output impedance of the Common Emitter amplifier in series with $R_5$ and the impedance of the Capacitor $C_2$. This however is much higher than the $220\Omega$ resistor that is designed to damp the circuit so can be ignored as it is in parallel with the damping resistor. It can be seen from Figure \ref{BPFgraph} that the signal is phase shifted positively below the resonant frequency and negatively above the resonant frequency with 0 phase shift     at the resonant frequency. This is because below the resonant frequency the circuit appears inductive and above the resonant frequency the circuit appears capacitive.The output of the filter is then fed in to a non inverting amplifier as this has a very high input impedance to prevent further loading of the resonant circuit. The amplifier has a gain given by
+\begin{center}
+\Huge
+
+$G= 1+ \frac{R_8}{R_7}\approx 38$
+
+
+
+\end{center}
+
+ 
 
 \section{Conclusion}
 
