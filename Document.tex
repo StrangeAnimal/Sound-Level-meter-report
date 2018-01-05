@@ -371,7 +371,7 @@ The circuit shown in figure \ref{RecDia} was constructed on the circuit board an
 \label{Rectifier}
 \end{figure}
 \subsubsection{Low Pass Filter}
-The Low Pass Filter was constructed on the circuit board according to the circuit diagram shown in figure \ref{LPF}. After the circuit was constructed it was tested by inputting a $1V Pk-Pk$ sine wave as shown in figure \ref{LPFscope}. The filter was then characterised between $1Hz$ and $1kHz$ with a $1V Pk-Pk$ input sine wave shown in figure \ref{LPFchar}. 
+The Low Pass Filter was constructed on the circuit board according to the circuit diagram shown in figure \ref{LPF}. After the circuit was constructed it was tested by inputting a $1V Pk-Pk$ sine wave as shown in figure \ref{LPFscope}. The filter was then characterised between $1Hz$ and $1kHz$ with a $1V Pk-Pk$ input sine wave shown in figure \ref{LPFchar}. The filter has a $-3dB$ cutoff point at $F_c \approx 80Hz$ 
 
 \begin{figure}
 \includegraphics[width=\textwidth]{LPF}
@@ -437,7 +437,28 @@ $F_c = \frac{1}{2\pi RC} = 0.5Hz$
 \cite{ArtElectronics}
 As the $3dB$ cut-off point is $0.5Hz$ almost all signal energy will be well above this point so the attenuation of this high pass filter can be ignored as it is negligible at frequencies of interest.
 \subsubsection{Output Impedance}
-The output impedance of the amplifier is calculated as the collector resistor in parallel with the resistance looking in to the collector. The resistance of the collector resistor is know as $3.9k\Omega$ and the resistance looking in to the collector is te resistance of the transistor and the emitter resistor in series. As the transistor can be modelled as a current source there is a current source in series with $R_E$. A current source has impedance $\approx \infty$. The output impedance is therefore the $3.9k\Omega$ resistor in parallel with a near infinite resistance so $Z_{out} \approx 3.9K\Omega$. This output impedance is low enough to allow good signal transfer to the next stage as the input impedance to the next stage is at lowest $4.7k\Omega$ which is higher than the output impedance.  
+The output impedance of the amplifier is calculated as the collector resistor in parallel with the resistance looking in to the collector. The resistance of the collector resistor is know as $3.9k\Omega$ and the resistance looking in to the collector is te resistance of the transistor and the emitter resistor in series. As the transistor can be modelled as a current source there is a current source in series with $R_E$. A current source has impedance $\approx \infty$. The output impedance is therefore the $3.9k\Omega$ resistor in parallel with a near infinite resistance so $Z_{out} \approx 3.9K\Omega$. This output impedance is low enough to allow good signal transfer to the next stage as the input impedance to the next stage is at lowest $4.7k\Omega$ which is higher than the output impedance.
+\subsubsection{Biasing}
+The transistor is biased with $R1$ and $R2$, These resistors are used to provide a constant quiescent current through the base and in turn from Collector to Emitter. This is done so that in the steady state the voltage at the collector with respect to ground is $\approx 7.5V$. This is done to allow the amplifier to produce positive and negative voltage swings. Without biasing the collector would be at $15V$ in the steady state due to no quiescent current flowing through $R1$ so no voltage drop across it. Due to this node being at $15V$ the amplifier can only produce a negative voltage swing as this node is already at the highest voltage in the circuit so cannot go higher. If however this point is at $7.5V$ half way between ground and Vcc then it can swing positive and negative in equal amounts. The capacitor $C_2$ is used to remove the DC offset of the output so as to make the signal centred around $0V$ instead of $7.5V$.\newline
+      The resistors are chosen of values to allow the desired amount of quiescent  current flows through the base. This is done by using a voltage divider configuration. This configuration however causes a design challenge that the current flowing through $R2$ must be about ten times grater than the current flowing through the base to prevent this "load" on the voltage divider from lowering the voltage at its mid point and producing incorrect biasing.    
+\subsubsection{Emitter Capacitor}
+The emitter capacitor $C_3$ is chosen to allow stable biasing of the amplifier. Due to the relatively low emitter resistor of $787\Omega$ the emitter voltage across $R4$ can become small when compared to the voltage drop $V_{BE}$ \cite{ArtElectronics}. This leads to instability in the biasing and the quiescent voltage at the collector as $V_{BE}$ varies with temperature. This change in $V_{BE}$ with temperature causes changes in the base current with temperature. To solve this problem and still have an amplifier with high gain(Necessitating a low $R_E$) a capacitor is placed in parallel with $R_E$. The capacitor is chosen so as to create the effect of a low impedance $R_E$ at signal frequencies but the DC biasing signal only sees a high impedance $R_4$(as the capacitor has infinite impedance at DC),so as to prevent the instability aforementioned. The capacitor must be chosen so that at signal frequencies its impedance is low compared to $r_e$ the resistance between base and emitter\cite{ArtElectronics}. In this circuit the DC biasing signal sees $\beta \times 787\Omega = 265k\Omega$ as the resistance looking in to the base, however at a frequency of $1kHz$ an input signal looking in to the base would see $787\Omega$ in parallel with $\approx 0.5\Omega$ times $h_{fe}$ or about $168\Omega$. This allows a low effective emitter resistor without the insatiability that this causes.  
+
+\subsection{Band Pass Filter}   
+The band pass filter section is formed from a parallel resonant circuit and a non inverting amplifier.
+
+\subsubsection{Parallel Resonant Circuit}
+The Parallel Resonant Circuit is formed form $R6,L1\&C5$. The Parallel Resonant Circuit has a frequency response of $0\Omega$ resistance at DC and infinite frequency as at DC the inductor is a short to ground and at infinite frequency the Capacitor is a short to ground. At the resonant frequency current flows backwards and forwards between the capacitor and inductor in phase with the input signal, this voltage opposes the input signal so no current can flow through the capacitor or inductor, as there is a voltage across the components but no current is flowing then the components must have infinite impedance from the perspective of the input signal. No current is drawn from the supply as $I_l = -I_C$ so $I_L + I_C = 0$ at resonance. For this particular circuit the resonant frequency is equal to
+
+\begin{center}
+\Huge
+
+$F=\frac{1}{2\pi\sqrt{LC}} = 1.5kHz$
+
+
+
+\end{center}
+The circuit also has a property called $Q$. The $Q$ factor is a representation of how damped the circuit is. Damping is a measure of the loss of energy from the circuit. A parallel LC circuit with ideal inductors and capacitors would have a $Q = \infty$ as no energy is lost from the circuit and the resonant oscilations would continue forever. The higher the Q of the circuit the sharper the peak of resonance is meaning that a high Q circuit would transition form low impedance at frequencies not equal to the resonant to high impedance at the resonant frequency very quickly and then transition back to low impedance.       
 
 \section{Conclusion}
 
