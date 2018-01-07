@@ -8,7 +8,7 @@
 \usepackage[backend=biber]{biblatex}
 \usepackage{textcomp}
 \DeclareMathSizes{12}{30}{16}{12}
-\usepackage[margin= 1in]{geometry}
+\usepackage[margin= 0.5in]{geometry}
 \graphicspath{ {Images/} }
 \usepackage{listings}
 \usepackage{float}
@@ -48,7 +48,7 @@
 \newpage
 
 \begin{abstract}
-
+This report outlines the construction of a sound level meter and the testing of the meter, this meter is sensitive to sounds at $1.5kHz$ and displays the sound level on a graph made of 10 LED's. This report outlines the theory behind the operation of the meter and the operation of the individual stages. 
 \end{abstract}
 
 \section{Introduction}
@@ -117,7 +117,7 @@ $R_1$ can then be calculated with the equation.
 $R_1 = \frac{V_{CC}-V_B}{10\times I_B}$
 \end{center} 
 This gives $R_1 \approx 27K\Omega$
-\begin{figure}
+\begin{figure}[!h]
 \includegraphics[scale=1]{CircuitDiagram}
 \caption{Common emitter amplifier circuit diagram}
 \end{figure}
@@ -193,7 +193,224 @@ The code was made to light all the LED's when maximum sound level was achieved. 
 
 \end{tabu}
 \newline
-These values were then used to create the code 
+These values were then used to create the code shown in Listing \ref{lst:code}
+
+
+
+\subsection{Construction}
+\subsubsection{Common Emitter Amplifier}
+After the common emitter amplifier was constructed on bread board using the resistor values determined in the design stage. This was to determine that the amplifier had been designed correctly. To test the design the voltage between the transistor collector and ground was measured and was found to be $V_C = 7.62V$. This is within the allowable limit of $6V$ to $9V$. The circuit was then constructed on the circuit board and the collector voltage was once again measured and found to be the same as before. The decoupling capacitors were then added to the circuit board. To test the amplifier a $20mV Pk-Pk$ sine wave at $1kHz$ was applied to the input and the output measured on an oscilloscope. This is shown in figure \ref{CEE}. Using an input of $23mV$ and an output of $4.3V$ leads to a gain of $G= 215$.
+
+\begin{figure}[!h]
+
+
+
+\includegraphics[width=\textwidth]{CEE}
+
+\caption{Testing of the Common Emitter Amplifier}
+\label{CEE}
+\end{figure}
+\subsubsection{Band Pass Filter}
+To construct the band pass filter the Inductor must first be made. It was calculated that the required inductor would be made of 61 turns. This Inductor was created and its inductance was measured using an LCR meter. The desired inductance is $11.3mH$ however the inductance was measured as $11.9mH$, to reduce this turns were removed and the Inductor re measured until its inductance was equal to $11.3mH$. This was achieved with 56 turns. The circuit was then constructed on the circuit board according to the circuit diagram shown in Figure \ref{BPF}. Once completed the filter was characterised between $1Hz$ and $5kHz$ with a $2V Pk-Pk$ sine wave input shown in figure \ref{BandPassFilter}. 
+
+\begin{figure}[!h]
+\includegraphics[width= \textwidth]{BPF}
+\caption{Characterisation of Band Pass Filter}
+\label{BandPassFilter}
+\end{figure}
+\subsubsection{Signal Rectifier}
+The circuit shown in figure \ref{RecDia} was constructed on the circuit board and was then tested as shown in figure \ref{Rectifier} with a $1.5kHz$ $5V$ sine wave.
+
+
+
+
+
+\begin{figure}[!h]
+\includegraphics[scale= 0.75]{rectifierdia}
+\caption{Rectifier Circuit Diagram}
+\label{RecDia}
+\end{figure}
+
+\begin{figure}[!h]
+\includegraphics[scale= 0.5]{rectifier}
+\caption{Rectifier analysis}
+\label{Rectifier}
+\end{figure}
+\subsubsection{Low Pass Filter}
+The Low Pass Filter was constructed on the circuit board according to the circuit diagram shown in figure \ref{LPF}. After the circuit was constructed it was tested by inputting a $1V Pk-Pk$ sine wave as shown in figure \ref{LPFscope}. The filter was then characterised between $1Hz$ and $1kHz$ with a $1V Pk-Pk$ input sine wave shown in figure \ref{LPFchar}. The filter has a $-3dB$ cutoff point at $F_c \approx 80Hz$ 
+
+\begin{figure}
+\includegraphics[width=\textwidth]{LPF}
+\caption{Low Pass Filter Circuit Diagram}
+\label{LPF}
+\end{figure}
+
+\begin{figure}[!h]
+\includegraphics[width =\textwidth]{lpfilter}
+\caption{Low Pass Filter input \& output}
+\label{LPFscope}
+\end{figure}
+
+\begin{figure}[!h]
+\includegraphics[width = \textwidth]{LPFchar}
+\caption{Low Pass Filter Characterisation}
+\label{LPFchar}
+\end{figure}
+
+\subsubsection{PIC Microcontroller}
+The Microcontroller circuit was constructed according to the circuit diagram shown in figure \ref{PIC}. The PIC was then programmed with the code shown in the design phase shown in figure \ref{code}.
+
+\begin{figure}[!h]
+\includegraphics[width = \textwidth]{PIC}
+\caption{PIC Microcontroller circuit diagram}
+\label{PIC}
+\end{figure} 
+
+\subsubsection{Final Test}
+Once all parts of the circuit were connected together the meter was tested by playing a $1.5kHz$ tone through a speaker from a signal generator near the meter and observing the LED's.
+
+
+
+
+
+
+\newpage
+\section{Analysis}
+\newpage
+\subsection{Finding $\beta$}
+The current gain of the transistor or $\beta$ is the ratio of the collector current to the base current. This is because 
+\begin{center}
+\Huge
+$I_c = \beta I_b$
+\end{center}
+
+
+
+\subsection{Common Emitter Amplifier}
+The Common Emitter Amplifier is used to amplify the low level signals coming from the microphone. This amplifier is used due to multiple attributes of the amplifier, namely, high input impedance, class A operation to prevent distortion and high single stage gain.
+
+\subsubsection{Input Impedance}
+The high input impedance is needed as the microphone is a high impedance device and to allow maximum power transfer between the microphone and the amplifier $Z_{mic} \approx Z_{amp}$. If this were not the case the already small signal from the microphone would be reduced even more due to internal losses in the internal series impedance of the microphone. The input impedance of the amplifier can be calculated by looking at what impedance the input sees looking in to the input, this is ,$R1$,$R2$ and the impedance lookin in to the base all in paralell \cite{ArtElectronics}. $R1 = 270k\Omega$,$R2 = 40k\Omega$ and the impedance looking in to the base is $h_{fe} \times R_E$ as $h_{fe}$ is equal to $\beta$ \cite{ArtElectronics} $265k\Omega= 787(R_4)\Omega \times 337(\beta)$.
+this works out to be  
+
+\begin{center}
+\Huge
+
+$Z_{in}= (\frac{1}{270\times 10^{3}} +\frac{1}{40\times 10^{3}} + \frac{1}{265 \times 10^{3}} )^{-1} \approx 31k\Omega$
+
+
+
+\end{center}
+The input capacitor $C_1 = 10\mu F$ is in series with the input impedance of $31k\Omega$, the capacitor also forms a high pass filter with the input impedance 
+\begin{center}
+\Huge
+
+$F_c = \frac{1}{2\pi RC} = 0.5Hz$
+
+
+
+\end{center}
+\cite{ArtElectronics}
+As the $3dB$ cut-off point is $0.5Hz$ almost all signal energy will be well above this point so the attenuation of this high pass filter can be ignored as it is negligible at frequencies of interest.
+\subsubsection{Output Impedance}
+The output impedance of the amplifier is calculated as the collector resistor in parallel with the resistance looking in to the collector. The resistance of the collector resistor is know as $3.9k\Omega$ and the resistance looking in to the collector is te resistance of the transistor and the emitter resistor in series. As the transistor can be modelled as a current source there is a current source in series with $R_E$. A current source has impedance $\approx \infty$. The output impedance is therefore the $3.9k\Omega$ resistor in parallel with a near infinite resistance so $Z_{out} \approx 3.9K\Omega$. This output impedance is low enough to allow good signal transfer to the next stage as the input impedance to the next stage is at lowest $4.7k\Omega$ which is higher than the output impedance.
+\subsubsection{Biasing}
+The transistor is biased with $R1$ and $R2$, These resistors are used to provide a constant quiescent current through the base and in turn from Collector to Emitter. This is done so that in the steady state the voltage at the collector with respect to ground is $\approx 7.5V$. This is done to allow the amplifier to produce positive and negative voltage swings. Without biasing the collector would be at $15V$ in the steady state due to no quiescent current flowing through $R1$ so no voltage drop across it. Due to this node being at $15V$ the amplifier can only produce a negative voltage swing as this node is already at the highest voltage in the circuit so cannot go higher. If however this point is at $7.5V$ half way between ground and Vcc then it can swing positive and negative in equal amounts. The capacitor $C_2$ is used to remove the DC offset of the output so as to make the signal centred around $0V$ instead of $7.5V$.\newline
+      The resistors are chosen of values to allow the desired amount of quiescent  current flows through the base. This is done by using a voltage divider configuration. This configuration however causes a design challenge that the current flowing through $R2$ must be about ten times grater than the current flowing through the base to prevent this "load" on the voltage divider from lowering the voltage at its mid point and producing incorrect biasing.    
+\subsubsection{Emitter Capacitor}
+The emitter capacitor $C_3$ is chosen to allow stable biasing of the amplifier. Due to the relatively low emitter resistor of $787\Omega$ the emitter voltage across $R4$ can become small when compared to the voltage drop $V_{BE}$ \cite{ArtElectronics}. This leads to instability in the biasing and the quiescent voltage at the collector as $V_{BE}$ varies with temperature. This change in $V_{BE}$ with temperature causes changes in the base current with temperature. To solve this problem and still have an amplifier with high gain(Necessitating a low $R_E$) a capacitor is placed in parallel with $R_E$. The capacitor is chosen so as to create the effect of a low impedance $R_E$ at signal frequencies but the DC biasing signal only sees a high impedance $R_4$(as the capacitor has infinite impedance at DC),so as to prevent the instability aforementioned. The capacitor must be chosen so that at signal frequencies its impedance is low compared to $r_e$ the resistance between base and emitter\cite{ArtElectronics}. In this circuit the DC biasing signal sees $\beta \times 787\Omega = 265k\Omega$ as the resistance looking in to the base, however at a frequency of $1kHz$ an input signal looking in to the base would see $787\Omega$ in parallel with $\approx 0.5\Omega$ times $h_{fe}$ or about $168\Omega$. This allows a low effective emitter resistor without the insatiability that this causes.  
+
+\subsection{Band Pass Filter}   
+The band pass filter section is formed from a parallel resonant circuit and a non inverting amplifier.
+
+\subsubsection{Parallel Resonant Circuit}
+The Parallel Resonant Circuit is formed form $R6,L1\&C5$. The Parallel Resonant Circuit has a frequency response of $0\Omega$ resistance at DC and infinite frequency as at DC the inductor is a short to ground and at infinite frequency the Capacitor is a short to ground. At the resonant frequency current flows backwards and forwards between the capacitor and inductor in phase with the input signal, this voltage opposes the input signal so no current can flow through the capacitor or inductor, as there is a voltage across the components but no current is flowing then the components must have infinite impedance from the perspective of the input signal. No current is drawn from the supply as $I_l = -I_C$ so $I_L + I_C = 0$ at resonance. For this particular circuit the resonant frequency is equal to
+
+\begin{center}
+\Huge
+
+$F=\frac{1}{2\pi\sqrt{LC}} = 1.5kHz$
+
+
+
+\end{center}
+The circuit also has a property called $Q$. The $Q$ factor is a representation of how damped the circuit is. Damping is a measure of the loss of energy from the circuit. A parallel LC circuit with ideal inductors and capacitors would have a $Q = \infty$ as no energy is lost from the circuit and the resonant oscillations would continue forever. The higher the Q of the circuit the sharper the peak of resonance is meaning that a high Q circuit would transition form low impedance at frequencies not equal to the resonant to high impedance at the resonant frequency very quickly and then transition back to low impedance very quickly. The $Q$ factor for this circuit is given by. 
+
+
+
+
+\begin{center}
+\Huge
+
+$Q= \omega_0RC = 2.07$
+
+
+
+\end{center}
+
+
+\begin{figure}[!h]
+\includegraphics[width=\textwidth]{BPFgraph}
+\caption{Voltage against frequency for band pass filter}
+\label{BPFgraph}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+   
+This means that the bandwidth of the filter is $723Hz$ as bandwidth is equal to the resonant frequency divided by the $Q$ factor. The $3dB$ pass band for this filter is $1140Hz$ to $1860Hz$. This however is not precise as the resonant circuit is also damped by the output impedance of the Common Emitter amplifier in series with $R_5$ and the impedance of the Capacitor $C_2$. This however is much higher than the $220\Omega$ resistor that is designed to damp the circuit so can be ignored as it is in parallel with the damping resistor. It can be seen from Figure \ref{BPFgraph} that the signal is phase shifted positively below the resonant frequency and negatively above the resonant frequency with 0 phase shift     at the resonant frequency. This is because below the resonant frequency the circuit appears inductive and above the resonant frequency the circuit appears capacitive.The output of the filter is then fed in to a non inverting amplifier as this has a very high input impedance to prevent further loading of the resonant circuit. The amplifier has a gain given by
+\begin{center}
+\Huge
+
+$G= 1+ \frac{R_8}{R_7}\approx 38$
+
+
+
+\end{center}
+\subsection{Rectifier}
+The rectifier section is formed by a Diode to allow current to flow only in one direction and a unity gain buffer to provide a low impedance drive to the next stage
+\subsubsection{Diode}
+The Diode only allows current to flow in one direction. This diode only allows negative voltages to be passed, this can be seen in figure \ref{Rectifier} as the output only has negative peaks but the input has both negative and positive peaks but the diode removed them due to it blocking forward current flow.
+\subsubsection{Unity Gain Buffer}
+The unity gain buffer is used to provide a low impedance output for this stage of the circuit. The unity gain buffer works by using negative feedback to reduce the gain of the op-amp to 1. The op-amp has very high input impedance $Z \approx 10^7 \Omega$ to prevent loading prior stages and to provide a low impedance source to further stages. The feedback is provided through feedback resistor $R10$. $R9$ is used as a pull down resistor to prevent a positive voltage when the diode is reverse biased. Due to the high input impedance the low reverse bias current $I\approx 10^{-9}A$ would create a voltage across the high input impedance as $V=IR$, even though $I$ is small $R$ is large so a voltage is still created so causing the op amp output to rise. $R9$ is used to lower the input impedance by putting it in parallel with the input impedance.
+\subsection{Low Pass Filter}
+The low pass filter is used to smooth the rectified waveform to a near constant DC level that is approximately equal to the peak value of the rectified waveform. The filter works by using negative feedback proportional to the frequency. This is done by using a capacitor as a feedback element. The filter also uses $C12$ and $R11$ to form an RC low pass filter.
+\subsubsection{Variable Feedback}
+The filter uses an inverting op-amp amplifier with negative feedback determined by the $7.5K\Omega$ resistor and the capacitor $C13$. At DC the capacitors impedance is $\infty$ so the feedback is just $7.5K\Omega$.
+\begin{center}
+\Huge
+$G=-\frac{R_f}{R_{in}}$
+\end{center}   
+\cite{BEGrob}
+at DC this means the gain is equal to $-1$ as the feedback impedance and the input resistor are the same. At higher frequencies the impedance of the capacitor becomes lower so the feedback impedance becomes lower as the feedback resistor and capacitor are in parallel. This lowering of the feedback impedance as the input resistor stays constant reduces the gain as the modulus of the gain is proportional to the feedback resistor.
+\subsubsection{RC Filter}
+The resistor $R11$ and $C12$ form an RC low pass filter. The filter works on the principle of a frequency dependent voltage divider.
+\begin{center}
+\Huge
+$V_{out} = \frac{Z_c}{Z_c + R_{11}} \times V_{in}$
+\newline
+$F_0 = \frac{1}{2\pi RC}$
+\end{center}
+At low frequencies the capacitor has high impedance so the fraction is approximately equal to 1. At high frequencies the capacitor has low impedance so the value for the fraction is low so the signal is attenuated. Both of these low pass filter circuits combine their attenuation of high frequencies so creating a steeper roll-off.
+this roll-off can be seen in Figure \ref{LPFchar}. Low frequencies have a gain of close to or greater than 1 whereas high frequencies have a gain much lower than 1.
+
+\subsection{PIC Microcontroller} 
+The PIC microcontroller uses two diodes $D2$ and $D3$ as input protection diodes. If the input is less then $\approx -0.6V$ then current flow through $D3$ clamping the voltage at $-0.6V$. If the input goes higher than $5.6V$ then current flows through $D2$ and the voltage is clamped at a maximum of $5.6V$. This is to protect the input  of the PIC from over voltage.
+\subsubsection{Code}
+The code uses the ADC of the PIC to produce a value between 0 and 1023 for an input of 0 to $5V$. This value is then used with a series of IF statements to determine how many LED's should be on depending on the input value. The number of LED's on at any time is determined by a Log function. This allows greater resolution at low sound levels such as quiet talking but allow a high range of sounds to be measured such as loud blowing on the microphone without the LED graph peaking too early. The LED output uses two registers as one register can only support 6 LED's but there are 10 LED's on the LED bar graph.  
+
+
+\section{Conclusion}
+In conclusion the system works as intended. The system was sensitive to low sounds but did not overload with loud sounds. The system works by using a high gain amplifier to amplify the signals coming from the microphone and then a band pass filter to filter the frequencies of interest and a rectifier and low pass filter to create a DC level proportional to the sound level. This is then fed in to a PIC micro controller to control the LED's depending on the sound level signal. All objectives have been met in this Lab however if I were to do this lab again I would remember to put $R0$ in as I spent a long time debugging the circuit thinking it did not work however I had forgotten $R0$. In future I will remember to check the circuit diagram an make sure that I have included all components before assuming that the circuit has a fault. I would also make sure to center Oscilloscope traces and to turn measurements on.   
+
+\section{Appendix}
 \begin{lstlisting}[caption={PIC Code},label={lst:code},language= C]
 //Newcastle University - EEE - Stage 1 - Sound Level Meter
 //16F819 PIC software to drive a 10-LED bargraph display from a dc level on ADC input 0 (AN0).
@@ -311,9 +528,9 @@ PORTB=0b11000001
 
 }
 
-if(value > 115.8 && value <= 209){
+if(value > 115.8 && value <= 380 ){
 PORTA=0b00110011
-PORTB=0b11000001
+PORTB=0b11000000
 
 }
 
@@ -328,183 +545,7 @@ PORTB=0b11000001
  
  } while (1);
 }
-
 \end{lstlisting}
-
-\subsection{Construction}
-\subsubsection{Common Emitter Amplifier}
-After the common emitter amplifier was constructed on bread board using the resistor values determined in the design stage. This was to determine that the amplifier had been designed correctly. To test the design the voltage between the transistor collector and ground was measured and was found to be $V_C = 7.62V$. This is within the allowable limit of $6V$ to $9V$. The circuit was then constructed on the circuit board and the collector voltage was once again measured and found to be the same as before. The decoupling capacitors were then added to the circuit board. To test the amplifier a $20mV Pk-Pk$ sine wave at $1kHz$ was applied to the input and the output measured on an oscilloscope. This is shown in figure \ref{CEE}. Using an input of $23mV$ and an output of $4.3V$ leads to a gain of $G= 215$.
-
-\begin{figure}[!h]
-
-
-
-\includegraphics[width=\textwidth]{CEE}
-
-\caption{Testing of the Common Emitter Amplifier}
-\label{CEE}
-\end{figure}
-\subsubsection{Band Pass Filter}
-To construct the band pass filter the Inductor must first be made. It was calculated that the required inductor would be made of 61 turns. This Inductor was created and its inductance was measured using an LCR meter. The desired inductance is $11.3mH$ however the inductance was measured as $11.9mH$, to reduce this turns were removed and the Inductor re measured until its inductance was equal to $11.3mH$. This was achieved with 56 turns. The circuit was then constructed on the circuit board according to the circuit diagram shown in Figure \ref{BPF}. Once completed the filter was characterised between $1Hz$ and $5kHz$ with a $2V Pk-Pk$ sine wave input shown in figure \ref{BandPassFilter}. 
-
-\begin{figure}[!h]
-\includegraphics[width= \textwidth]{BPF}
-\caption{Characterisation of Band Pass Filter}
-\label{BandPassFilter}
-\end{figure}
-\subsubsection{Signal Rectifier}
-The circuit shown in figure \ref{RecDia} was constructed on the circuit board and was then tested as shown in figure \ref{Rectifier} with a $1.5kHz$ $5V$ sine wave.
-
-
-
-
-
-\begin{figure}[!h]
-\includegraphics[scale= 0.75]{rectifierdia}
-\caption{Rectifier Circuit Diagram}
-\label{RecDia}
-\end{figure}
-
-\begin{figure}[!h]
-\includegraphics[scale= 0.5]{rectifier}
-\caption{Rectifier analysis}
-\label{Rectifier}
-\end{figure}
-\subsubsection{Low Pass Filter}
-The Low Pass Filter was constructed on the circuit board according to the circuit diagram shown in figure \ref{LPF}. After the circuit was constructed it was tested by inputting a $1V Pk-Pk$ sine wave as shown in figure \ref{LPFscope}. The filter was then characterised between $1Hz$ and $1kHz$ with a $1V Pk-Pk$ input sine wave shown in figure \ref{LPFchar}. The filter has a $-3dB$ cutoff point at $F_c \approx 80Hz$ 
-
-\begin{figure}
-\includegraphics[width=\textwidth]{LPF}
-\caption{Low Pass Filter Circuit Diagram}
-\label{LPF}
-\end{figure}
-
-\begin{figure}[!h]
-\includegraphics[width =\textwidth]{lpfilter}
-\caption{Low Pass Filter input \& output}
-\label{LPFscope}
-\end{figure}
-
-\begin{figure}[!h]
-\includegraphics[width = \textwidth]{LPFchar}
-\caption{Low Pass Filter Characterisation}
-\label{LPFchar}
-\end{figure}
-
-\subsubsection{PIC Microcontroller}
-The Microcontroller circuit was constructed according to the circuit diagram shown in figure \ref{PIC}. The PIC was then programmed with the code shown in the design phase shown in figure \ref{code}.
-
-\begin{figure}[!h]
-\includegraphics[width = \textwidth]{PIC}
-\caption{PIC Microcontroller circuit diagram}
-\label{PIC}
-\end{figure} 
-
-\subsubsection{Final Test}
-Once all parts of the circuit were connected together the meter was tested by playing a $1.5kHz$ tone through a speaker from a signal generator near the meter and observing the LED's.
-
-
-
-
-
-
-
-\section{Analysis}
-\subsection{Common Emitter Amplifier}
-The Common Emitter Amplifier is used to amplify the low level signals coming from the microphone. This amplifier is used due to multiple attributes of the amplifier, namely, high input impedance, class A operation to prevent distortion and high single stage gain.
-
-\subsubsection{Input Impedance}
-The high input impedance is needed as the microphone is a high impedance device and to allow maximum power transfer between the microphone and the amplifier $Z_{mic} \approx Z_{amp}$. If this were not the case the already small signal from the microphone would be reduced even more due to internal losses in the internal series impedance of the microphone. The input impedance of the amplifier can be calculated by looking at what impedance the input sees looking in to the input, this is ,$R1$,$R2$ and the impedance lookin in to the base all in paralell \cite{ArtElectronics}. $R1 = 270k\Omega$,$R2 = 40k\Omega$ and the impedance looking in to the base is $h_{fe} \times R_E$ as $h_{fe}$ is equal to $\beta$ \cite{ArtElectronics} $265k\Omega= 787(R_4)\Omega \times 337(\beta)$.
-this works out to be  
-
-\begin{center}
-\Huge
-
-$Z_{in}= (\frac{1}{270\times 10^{3}} +\frac{1}{40\times 10^{3}} + \frac{1}{265 \times 10^{3}} )^{-1} \approx 31k\Omega$
-
-
-
-\end{center}
-The input capacitor $C_1 = 10\mu F$ is in series with the input impedance of $31k\Omega$, the capacitor also forms a high pass filter with the input impedance 
-\begin{center}
-\Huge
-
-$F_c = \frac{1}{2\pi RC} = 0.5Hz$
-
-
-
-\end{center}
-\cite{ArtElectronics}
-As the $3dB$ cut-off point is $0.5Hz$ almost all signal energy will be well above this point so the attenuation of this high pass filter can be ignored as it is negligible at frequencies of interest.
-\subsubsection{Output Impedance}
-The output impedance of the amplifier is calculated as the collector resistor in parallel with the resistance looking in to the collector. The resistance of the collector resistor is know as $3.9k\Omega$ and the resistance looking in to the collector is te resistance of the transistor and the emitter resistor in series. As the transistor can be modelled as a current source there is a current source in series with $R_E$. A current source has impedance $\approx \infty$. The output impedance is therefore the $3.9k\Omega$ resistor in parallel with a near infinite resistance so $Z_{out} \approx 3.9K\Omega$. This output impedance is low enough to allow good signal transfer to the next stage as the input impedance to the next stage is at lowest $4.7k\Omega$ which is higher than the output impedance.
-\subsubsection{Biasing}
-The transistor is biased with $R1$ and $R2$, These resistors are used to provide a constant quiescent current through the base and in turn from Collector to Emitter. This is done so that in the steady state the voltage at the collector with respect to ground is $\approx 7.5V$. This is done to allow the amplifier to produce positive and negative voltage swings. Without biasing the collector would be at $15V$ in the steady state due to no quiescent current flowing through $R1$ so no voltage drop across it. Due to this node being at $15V$ the amplifier can only produce a negative voltage swing as this node is already at the highest voltage in the circuit so cannot go higher. If however this point is at $7.5V$ half way between ground and Vcc then it can swing positive and negative in equal amounts. The capacitor $C_2$ is used to remove the DC offset of the output so as to make the signal centred around $0V$ instead of $7.5V$.\newline
-      The resistors are chosen of values to allow the desired amount of quiescent  current flows through the base. This is done by using a voltage divider configuration. This configuration however causes a design challenge that the current flowing through $R2$ must be about ten times grater than the current flowing through the base to prevent this "load" on the voltage divider from lowering the voltage at its mid point and producing incorrect biasing.    
-\subsubsection{Emitter Capacitor}
-The emitter capacitor $C_3$ is chosen to allow stable biasing of the amplifier. Due to the relatively low emitter resistor of $787\Omega$ the emitter voltage across $R4$ can become small when compared to the voltage drop $V_{BE}$ \cite{ArtElectronics}. This leads to instability in the biasing and the quiescent voltage at the collector as $V_{BE}$ varies with temperature. This change in $V_{BE}$ with temperature causes changes in the base current with temperature. To solve this problem and still have an amplifier with high gain(Necessitating a low $R_E$) a capacitor is placed in parallel with $R_E$. The capacitor is chosen so as to create the effect of a low impedance $R_E$ at signal frequencies but the DC biasing signal only sees a high impedance $R_4$(as the capacitor has infinite impedance at DC),so as to prevent the instability aforementioned. The capacitor must be chosen so that at signal frequencies its impedance is low compared to $r_e$ the resistance between base and emitter\cite{ArtElectronics}. In this circuit the DC biasing signal sees $\beta \times 787\Omega = 265k\Omega$ as the resistance looking in to the base, however at a frequency of $1kHz$ an input signal looking in to the base would see $787\Omega$ in parallel with $\approx 0.5\Omega$ times $h_{fe}$ or about $168\Omega$. This allows a low effective emitter resistor without the insatiability that this causes.  
-
-\subsection{Band Pass Filter}   
-The band pass filter section is formed from a parallel resonant circuit and a non inverting amplifier.
-
-\subsubsection{Parallel Resonant Circuit}
-The Parallel Resonant Circuit is formed form $R6,L1\&C5$. The Parallel Resonant Circuit has a frequency response of $0\Omega$ resistance at DC and infinite frequency as at DC the inductor is a short to ground and at infinite frequency the Capacitor is a short to ground. At the resonant frequency current flows backwards and forwards between the capacitor and inductor in phase with the input signal, this voltage opposes the input signal so no current can flow through the capacitor or inductor, as there is a voltage across the components but no current is flowing then the components must have infinite impedance from the perspective of the input signal. No current is drawn from the supply as $I_l = -I_C$ so $I_L + I_C = 0$ at resonance. For this particular circuit the resonant frequency is equal to
-
-\begin{center}
-\Huge
-
-$F=\frac{1}{2\pi\sqrt{LC}} = 1.5kHz$
-
-
-
-\end{center}
-The circuit also has a property called $Q$. The $Q$ factor is a representation of how damped the circuit is. Damping is a measure of the loss of energy from the circuit. A parallel LC circuit with ideal inductors and capacitors would have a $Q = \infty$ as no energy is lost from the circuit and the resonant oscillations would continue forever. The higher the Q of the circuit the sharper the peak of resonance is meaning that a high Q circuit would transition form low impedance at frequencies not equal to the resonant to high impedance at the resonant frequency very quickly and then transition back to low impedance very quickly. The $Q$ factor for this circuit is given by. 
-
-
-
-
-\begin{center}
-\Huge
-
-$Q= \omega_0RC = 2.07$
-
-
-
-\end{center}
-
-
-\begin{figure}[!h]
-\includegraphics[width=\textwidth]{BPFgraph}
-\caption{Voltage against frequency for band pass filter}
-\label{BPFgraph}
-\end{figure}
-
-
-
-
-
-
-
-
-
-
-   
-This means that the bandwidth of the filter is $723Hz$ as bandwidth is equal to the resonant frequency divided by the $Q$ factor. The $3dB$ pass band for this filter is $1140Hz$ to $1860Hz$. This however is not precise as the resonant circuit is also damped by the output impedance of the Common Emitter amplifier in series with $R_5$ and the impedance of the Capacitor $C_2$. This however is much higher than the $220\Omega$ resistor that is designed to damp the circuit so can be ignored as it is in parallel with the damping resistor. It can be seen from Figure \ref{BPFgraph} that the signal is phase shifted positively below the resonant frequency and negatively above the resonant frequency with 0 phase shift     at the resonant frequency. This is because below the resonant frequency the circuit appears inductive and above the resonant frequency the circuit appears capacitive.The output of the filter is then fed in to a non inverting amplifier as this has a very high input impedance to prevent further loading of the resonant circuit. The amplifier has a gain given by
-\begin{center}
-\Huge
-
-$G= 1+ \frac{R_8}{R_7}\approx 38$
-
-
-
-\end{center}
-\subsection{Rectifier}
-The rectifier section is formed by a Diode to allow current to flow only in one direction and a unity gain buffer to provide a low impedance drive to the next stage
-\subsubsection{Diode}
-The Diode only allows current to flow in one direction. This diode only allows negative voltages to be passed, this can be seen in figure \ref{Rectifier} as the output only has negative peaks but the input has both negative and positive peaks but the diode removed them.   
- 
-
-\section{Conclusion}
 
 \printbibliography
 
